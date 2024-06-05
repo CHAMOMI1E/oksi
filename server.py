@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 
 from config import TOKEN_TEST
-from bot.handlers.admin import admin_router
+from bot.routers.admin import admin_router
 
 bot = Bot(TOKEN_TEST, parse_mode=ParseMode.HTML)
 dp = Dispatcher()

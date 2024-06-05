@@ -6,6 +6,8 @@ from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 import os
 
+# from aiohttp import ClientSession as requests
+
 load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
