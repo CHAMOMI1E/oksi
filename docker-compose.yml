@@ -11,23 +11,19 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data/db/postgres:/var/lib/postgresql/data
 
-#  mongodb:
-#    image: mongo
-#    container_name: mongodb
-#    ports:
-#      - 27017:27017
-#    networks:
-#      - mongo-network
-#    volumes:
-#      - mongo_data:/data/db
+  mongodb:
+    image: mongo:latest
+    container_name: 'mongodb'
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./data/db/mongo:/data/db
 
 volumes:
   postgres_data:
-#  mongo_data:
-
-
-#networks:
-#  mongo-network:
-#    driver: bridge
+  mongo_data:

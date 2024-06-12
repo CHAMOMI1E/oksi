@@ -7,7 +7,7 @@ from bot.utils.channel_sender import channel_send_message
 from bot.utils.get_channel import get_chat_member
 
 from ai import giga_chat
-from bot.utils.states import RequestCHAT
+from bot.utils.states import RequestCHAT, RequestIMAGE
 
 start_router = Router()
 
@@ -26,12 +26,13 @@ async def req_for_chat(call: types.CallbackQuery, state: FSMContext):
 
 @start_router.callback_query(F.data == 'giga_image')
 async def req_for_image(call: types.CallbackQuery, state: FSMContext):
-    await call.message.reply_photo()
+    await call.message.edit_text("Введите запрос для создания картинки:")
+    await state.set_state(RequestIMAGE.text)
 
 
 @start_router.callback_query(F.data == 'edit_channel')
 async def test(call: types.CallbackQuery):
-    await call.message.answer('test', reply_markup=paginator())
+    await call.message.answer('test')
 
 
 @start_router.message(RequestCHAT.text)
@@ -39,3 +40,13 @@ async def chat_answer(message: types.Message, state: FSMContext):
     await state.clear()
     load = await message.answer("Ожидайте ответа...")
     await load.edit_text(await giga_chat.send_prompt(message.text, await giga_chat.get_access_token()))
+
+
+@start_router.message(RequestIMAGE)
+async def image_answer(message: types.Message, state: FSMContext):
+    await state.clear()
+    load = await message.answer("Ожидайте ответа...")
+    await load.edit_text(await giga_chat.sent_prompt_and_get_response('smth', ''))
+
+
+

@@ -5,6 +5,8 @@ from aiohttp import BasicAuth
 from dotenv import load_dotenv
 import os
 
+from ai.utils import get_file_id
+
 load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
@@ -69,8 +71,7 @@ async def send_prompt(msg: str, access_token: str):
 
 async def sent_prompt_and_get_response(msg: str, access_token: str):
     res = await send_prompt(msg, access_token)
-    data, is_image = get_file_id(
-        res)  # Предполагаемая функция get_file_id должна быть асинхронной, если это необходимо.
+    data, is_image = get_file_id(res)
     if is_image:
         data = await get_image(file_id=data, access_token=access_token)
     return data, is_image
