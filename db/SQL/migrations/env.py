@@ -4,8 +4,10 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from db.SQL.models.base import *
+
 from db.SQL.models.user import *
+from db.SQL.models.channel import *
+from db.SQL.models.base import *
 
 from config import DB_TOKEN
 

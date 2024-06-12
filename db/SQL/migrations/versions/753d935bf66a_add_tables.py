@@ -1,8 +1,8 @@
-"""first version
+"""add tables
 
-Revision ID: 314a99a657de
+Revision ID: 753d935bf66a
 Revises: 
-Create Date: 2024-06-05 09:37:52.196365
+Create Date: 2024-06-06 12:09:35.462231
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "314a99a657de"
+revision: str = "753d935bf66a"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,6 +26,12 @@ def upgrade() -> None:
         sa.Column("id_tg", sa.BigInteger(), nullable=False),
         sa.Column("username", sa.String(), nullable=False),
         sa.Column("id", sa.Integer(), autoincrement=True, nullable=False),
+        sa.Column(
+            "created_at",
+            sa.DateTime(),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###

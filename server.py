@@ -6,14 +6,14 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 
 from config import TOKEN_TEST
-from bot.routers.admin import admin_router
+from bot.routers.admin import start_router
 
 bot = Bot(TOKEN_TEST, parse_mode=ParseMode.HTML)
 dp = Dispatcher()
 
 
 async def main() -> None:
-    dp.include_router(admin_router)
+    dp.include_routers(start_router,)
 
     await dp.start_polling(bot)
 
@@ -28,6 +28,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print('stop')
-
-id = -1002143445003
-
