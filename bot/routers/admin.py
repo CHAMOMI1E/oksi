@@ -2,20 +2,22 @@ from aiogram import Router, types, F
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 
-from bot.core.keyboards.admin import start_admin, edit_group, start_owner, pagination_kb
+from bot.core.keyboards.admin import start_admin, pagination_kb
 from bot.utils.channel_sender import channel_send_message
+from bot.utils.cheker import start_checker
 from bot.utils.get_channel import get_chat_member
 
 from ai import giga_chat
-from bot.utils.states import RequestCHAT, RequestIMAGE
+from bot.utils.states import RequestCHAT
 
 start_router = Router()
 
 
 @start_router.message(CommandStart())
 async def hello_message(message: types.Message):
-    await message.answer(text='Здравствуйте. Я ваш персональный помошник "Окси". Чем я могу вам помочь?',
-                         reply_markup=pagination_kb(router=start_router))
+    await start_checker(message.from_user.id)
+    await message.answer(text='Здравствуйте. Я ваш персональный помошник "Гига-чад". Чем я могу вам помочь?',
+                         reply_markup=start_admin())
 
 
 @start_router.callback_query(F.data == 'giga_chat')
@@ -24,29 +26,20 @@ async def req_for_chat(call: types.CallbackQuery, state: FSMContext):
     await state.set_state(RequestCHAT.text)
 
 
-@start_router.callback_query(F.data == 'giga_image')
-async def req_for_image(call: types.CallbackQuery, state: FSMContext):
-    await call.message.edit_text("Введите запрос для создания картинки:")
-    await state.set_state(RequestIMAGE.text)
+@start_router.callback_query(F.data == 'giga_rules')
+async def rules_request(call: types.CallbackQuery):
+    await call.message.edit_text("Введите свой запрос:")
 
 
-@start_router.callback_query(F.data == 'edit_channel')
-async def test(call: types.CallbackQuery):
-    await call.message.answer('test')
+@start_router.callback_query(F.data == 'history_of_tokens')
+async def history_of_tokens(call: types.CallbackQuery):
+    await call.message.edit_text("Введите свой запрос:")
 
 
 @start_router.message(RequestCHAT.text)
 async def chat_answer(message: types.Message, state: FSMContext):
     await state.clear()
     load = await message.answer("Ожидайте ответа...")
-    await load.edit_text(await giga_chat.send_prompt(message.text, await giga_chat.get_access_token()))
-
-
-@start_router.message(RequestIMAGE)
-async def image_answer(message: types.Message, state: FSMContext):
-    await state.clear()
-    load = await message.answer("Ожидайте ответа...")
-    await load.edit_text(await giga_chat.sent_prompt_and_get_response('smth', ''))
-
-
+    text = await giga_chat.send_prompt(message.text, await giga_chat.get_access_token())
+    await load.edit_text(text)
 

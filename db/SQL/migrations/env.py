@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from db.SQL.models.user import *
-from db.SQL.models.channel import *
+from db.SQL.models.chat import *
 from db.SQL.models.base import *
 
 from config import DB_TOKEN
